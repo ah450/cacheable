@@ -90,5 +90,4 @@ module Cacheable
     def destroy_id_cache
       $redis.del self.class.cache_key(id)
     end
-  end
 end
