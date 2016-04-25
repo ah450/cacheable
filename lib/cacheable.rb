@@ -42,10 +42,11 @@ module Cacheable
 
     def find_one_cache(id)
       id = id.id if ActiveRecord::Base === id
-      cached = $redis.get cache_key(id)
+      key = cache_key(id)
+      cached = $redis.get key
       if cached.nil?
         record = method(:find).super_method.call id
-        $redis.set cache_key(id), Marshal.dump(record)
+        $redis.set key, Marshal.dump(record)
         $redis.expire key, 1.day.seconds.to_int
         record
       else
